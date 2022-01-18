@@ -53,52 +53,11 @@
             <sm-input placeholder="Search" type="search"></sm-input>
             <theme-toggle></theme-toggle>
         </header>
-        <sm-tab-header target="sections">
-            <sm-tab>Section 1</sm-tab>
-            <sm-tab>Section 2</sm-tab>
-        </sm-tab-header>
+
         <sm-tab-panels id="sections">
             <section class="section">
                 <div class="section__header">
-                    <!--   <div class="grid">
-                        <h3>Section Heading</h3>
-                        <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        </p>
-                    </div>
-                 <sm-menu align-options="right">
-                        <menu-option>first option</menu-option>
-                        <menu-option>second option</menu-option>
-                        <menu-option>third option</menu-option>
-                    </sm-menu>
-                </div>
-                <sm-carousel>
-                    <div class="card">
-                        <h3>Card</h3>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsam, officia.
-                        </p>
-                    </div>
-                    <div class="card">
-                        <h3>Card</h3>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsam, officia.
-                        </p>
-                    </div>
-                    <div class="card">
-                        <h3>Card</h3>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsam, officia.
-                        </p>
-                    </div>
-                    <div class="card">
-                        <h3>Card</h3>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsam, officia.
-                        </p>
-                    </div>
-                </sm-carousel>-->
-               <br> 
+                <br>
                 </div>
                <sm-form class="block"><br><br>
                 <h1 align="center" style="text-decoration:underline;">Merkle Tree</h1><br>
@@ -796,6 +755,21 @@
     <script src="js/script.js"></script>
     <script src="js/main_UI.js"></script>
     <script src="js/components.min.js"></script>
+    <script id="onLoadStartUp">
+        function onLoadStartUp() {
+
+            //floDapps.addStartUpFunction('Sample', Promised Function)
+            //floDapps.setAppObjectStores({sampleObs1:{}, sampleObs2:{options{autoIncrement:true, keyPath:'SampleKey'}, Indexes:{sampleIndex:{}}}})
+            //floDapps.setCustomPrivKeyInput( () => { FUNCTION BODY *must resolve private key* } )
+
+            floDapps.launchStartUp().then(result => {
+                console.log(result)
+                alert(`Welcome FLO_ID: ${myFloID}`)
+                //App functions....
+            }).catch(error => console.error(error))
+        }
+    </script>
+    
     <script id="floGlobals">
         /* Constants for FLO blockchain operations !!Make sure to add this at begining!! */
         const floGlobals = {
@@ -823,20 +797,6 @@
             appObjects: {},
             generalData: {},
             lastVC: {}
-        }
-    </script>
-    <script id="onLoadStartUp">
-        function onLoadStartUp() {
-
-            //floDapps.addStartUpFunction('Sample', Promised Function)
-            //floDapps.setAppObjectStores({sampleObs1:{}, sampleObs2:{options{autoIncrement:true, keyPath:'SampleKey'}, Indexes:{sampleIndex:{}}}})
-            //floDapps.setCustomPrivKeyInput( () => { FUNCTION BODY *must resolve private key* } )
-
-            floDapps.launchStartUp().then(result => {
-                console.log(result)
-                alert(`Welcome FLO_ID: ${myFloID}`)
-                //App functions....
-            }).catch(error => console.error(error))
         }
     </script>
     <script id="init_lib" version="1.0.1">
