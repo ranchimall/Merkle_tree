@@ -58,7 +58,7 @@ getRef("vrbtn").addEventListener('click', () => {
     const elementToCheck = getRef('element_to_check').value.trim();
     const proof = getRef('proof').value.trim().split(',')
     floCloudAPI.requestApplicationData(merkleRoot, { mostRecent: true }).then(res => {
-        // let isInCloud = `<div>The Merkle root <b style="overflow-wrap: anywhere">${merkleRoot}</b> is ${res.length > 0 ? '' : 'not'} present in the cloud</div>`
+        let isInCloud = `<div>The Merkle root <b style="overflow-wrap: anywhere">${merkleRoot}</b> is ${res.length > 0 ? '' : 'not'} present in the cloud</div>`
         let verified
         const leaf = `0x${sha256(elementToCheck)}`
         verified = MerkleTree.verify(proof, leaf, merkleRoot, sha256, options)
@@ -70,7 +70,7 @@ getRef("vrbtn").addEventListener('click', () => {
             getRef("otp2").classList.remove('success')
         }
         getRef("otp2").classList.remove('hide')
-        getRef("otp2").innerHTML = ` <h4>${verified ? 'Verified' : 'Verification Failed (Not a member)'}</h4>`;
+        getRef("otp2").innerHTML = ` <h4>${verified ? 'Verified' : 'Verification Failed (Not a member)'}</h4> <br><br>${isInCloud}`;
     }).catch(err => {
         notify(err, 'error')
     })
