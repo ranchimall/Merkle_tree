@@ -87,23 +87,6 @@ function throttle(func, delay) {
     }, delay);
 }
 
-class Stack {
-    constructor() {
-        this.items = [];
-    }
-    push(element) {
-        this.items.push(element);
-    }
-    pop() {
-        if (this.items.length == 0)
-        return "Underflow";
-        return this.items.pop();
-    }
-    peek() {
-        return this.items[this.items.length - 1];
-    }
-}
-
 // function required for popups or modals to appear
 function showPopup(popupId, pinned) {
     zIndex++
@@ -169,20 +152,19 @@ async function getPromptInput(title, message = '', isPassword = true, cancelText
 
 //Function for displaying toast notifications. pass in error for mode param if you want to show an error.
 function notify(message, mode, options = {}) {
-    const { pinned = false, sound = false } = options
     let icon
     switch (mode) {
         case 'success':
-            icon = `<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"/></svg>`
+            icon = `<svg class="icon icon--success" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"/></svg>`
             break;
         case 'error':
-            icon = `<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-7v2h2v-2h-2zm0-8v6h2V7h-2z"/></svg>`
+            icon = `<svg class="icon icon--error" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-7v2h2v-2h-2zm0-8v6h2V7h-2z"/></svg>`
+            options.pinned = true
             break;
     }
-    getRef("notification_drawer").push(message, { pinned, icon });
-    if (navigator.onLine && sound) {
-        getRef("notification_sound").currentTime = 0;
-        getRef("notification_sound").play();
+    getRef("notification_drawer").push(message, { icon, ...options });
+    if (mode === 'error') {
+        console.error(message)
     }
 }
 
@@ -273,7 +255,7 @@ function showPage(targetPage, options = {}) {
     else {
         pageId = targetPage.includes('#') ? targetPage.split('#')[1] : targetPage
     }
-    if(!appPages.includes(pageId)) return
+    if (!appPages.includes(pageId)) return
     document.querySelector('.page:not(.hide-completely)').classList.add('hide-completely')
     document.querySelector('.nav-list__item--active').classList.remove('nav-list__item--active')
     getRef(pageId).classList.remove('hide-completely')
@@ -301,5 +283,32 @@ function showPage(targetPage, options = {}) {
     }
     if (hashChange && window.innerWidth < 640) {
         getRef('side_nav').close()
+    }
+}
+function buttonLoader(id, show) {
+    const button = typeof id === 'string' ? getRef(id) : id;
+    button.disabled = show;
+    const animOptions = {
+        duration: 200,
+        fill: 'forwards',
+        easing: 'ease'
+    }
+    if (show) {
+        button.animate([
+            {
+                clipPath: 'circle(100%)',
+            },
+            {
+                clipPath: 'circle(0)',
+            },
+        ], animOptions).onfinish = e => {
+            e.target.commitStyles()
+            e.target.cancel()
+        }
+        button.parentNode.append(createElement('sm-spinner'))
+    } else {
+        button.style = ''
+        const potentialTarget = button.parentNode.querySelector('sm-spinner')
+        if (potentialTarget) potentialTarget.remove();
     }
 }
